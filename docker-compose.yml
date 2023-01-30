@@ -1,0 +1,11 @@
+services:
+  entrypoint:
+    build:
+      context: .
+      dockerfile: ./build/entrypoint/Dockerfile
+    ports:
+    - "9467:8000"
+    volumes:
+      - ./images:/images
+      - ./templates:/templates
+    restart: on-failure

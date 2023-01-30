@@ -28,6 +28,8 @@ func main() {
 	// Serve the templates
 	app.Static("/templates", "templates")
 
+	fmt.Println(app.Stack())
+
 	// Serve the HTML page
 	app.Get("/", func(c *fiber.Ctx) error {
 		// Create the plot
@@ -39,13 +41,13 @@ func main() {
 		pts := plotter.XYs{{X: 1, Y: 1}, {X: 2, Y: 2}, {X: 3, Y: 3}, {X: 4, Y: 4}}
 		err := plotutil.AddLinePoints(p, "Line 1", pts)
 		if err != nil {
-			return c.Status(500).SendString(fmt.Sprint(err))
+			return c.Status(500).SendString(fmt.Sprintf("%s", err))
 		}
 
 		// Save the plot as an image file
 		if err := p.Save(4*vg.Inch, 4*vg.Inch, "images/plot.png"); err != nil {
 
-			return c.Status(500).SendString(fmt.Sprint(err))
+			return c.Status(500).SendString(fmt.Sprintf("%s", err))
 		}
 
 		// Render the HTML template
@@ -65,7 +67,7 @@ func main() {
 	})
 
 	fmt.Println("Listening on http://localhost:8000")
-	if err := app.Listen("localhost:8000"); err != nil {
+	if err := app.Listen(":8000"); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
